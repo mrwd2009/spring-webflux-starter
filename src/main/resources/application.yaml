@@ -1,0 +1,6 @@
+server:
+  port: 4102
+
+spring:
+  profiles:
+    active: "${CONTRACT_ENVIRONMENT:development}"
