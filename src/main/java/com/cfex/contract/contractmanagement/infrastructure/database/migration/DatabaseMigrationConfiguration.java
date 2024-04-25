@@ -5,7 +5,6 @@ import liquibase.UpdateSummaryOutputEnum;
 import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.liquibase.DataSourceClosingSpringLiquibase;
-import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -13,9 +12,6 @@ import org.springframework.boot.jdbc.DatabaseDriver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Configuration
 public class DatabaseMigrationConfiguration {
