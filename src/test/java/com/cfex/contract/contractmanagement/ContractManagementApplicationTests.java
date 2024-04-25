@@ -9,7 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
+import java.time.Clock;
+import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 
 //@SpringBootTest
@@ -46,6 +49,23 @@ class ContractManagementApplicationTests {
 				""";
 		var obj = mapper.readValue(jsonStr, Sample.class);
 		System.out.println(obj.salary.getClass());
+	}
+
+	@Test
+	void testClock() {
+		// Clock
+		Clock clock = Clock.systemDefaultZone();
+		System.out.println("Current time with default time-zone: " + clock.instant());
+
+		Clock clock2 = Clock.system(ZoneId.of("America/Los_Angeles"));
+		System.out.println("Current time with log time-zone: " + clock2.instant());
+
+		// Instant
+		Instant instant = Instant.now();
+		System.out.println("Current instant: " + instant);
+
+		// Convert Instant to a specific time-zone
+		System.out.println("Instant in UTC: " + instant.atZone(ZoneId.of("America/Los_Angeles")));
 	}
 
 }
