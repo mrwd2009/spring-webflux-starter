@@ -15,16 +15,14 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 @Configuration
 public class DatabaseMigrationConfiguration {
-    @Bean
+    @Bean("contractLiquibaseProperties")
     @ConfigurationProperties(prefix = "cfex-oc.liquibase.contract")
-    @Qualifier("contract")
     public LiquibaseProperties getContractLiquibaseProperties() {
         return new LiquibaseProperties();
     }
 
-    @Bean
+    @Bean("gatewayLiquibaseProperties")
     @ConfigurationProperties(prefix = "cfex-oc.liquibase.gateway")
-    @Qualifier("gateway")
     public LiquibaseProperties getGatewayLiquibasePropertiesList() {
         return new LiquibaseProperties();
     }
@@ -69,12 +67,12 @@ public class DatabaseMigrationConfiguration {
     }
 
     @Bean
-    public SpringLiquibase getContractMigration(@Qualifier("contract") LiquibaseProperties properties) {
+    public SpringLiquibase getContractMigration(@Qualifier("contractLiquibaseProperties") LiquibaseProperties properties) {
         return createMigration(properties);
     }
 
     @Bean
-    public SpringLiquibase getGatewayMigration(@Qualifier("gateway") LiquibaseProperties properties) {
+    public SpringLiquibase getGatewayMigration(@Qualifier("gatewayLiquibaseProperties") LiquibaseProperties properties) {
         return createMigration(properties);
     }
 }
