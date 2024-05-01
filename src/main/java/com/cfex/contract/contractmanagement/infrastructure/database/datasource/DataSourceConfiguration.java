@@ -22,6 +22,7 @@ import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 import org.springframework.data.relational.RelationalManagedTypes;
 import org.springframework.data.relational.core.mapping.DefaultNamingStrategy;
 import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.r2dbc.connection.R2dbcTransactionManager;
 import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.util.ClassUtils;
 
@@ -115,6 +116,16 @@ public class DataSourceConfiguration {
     @Bean("gatewayEntityTemplate")
     R2dbcEntityTemplate getGatewayR2dbcEntityTemplate(@Qualifier("gatewayDatabaseClient") DatabaseClient databaseClient, ApplicationContext applicationContext) throws ClassNotFoundException {
         return createR2dbcEntityTemplate(databaseClient, "com.cfex.contract.contractmanagement.infrastructure.database.model.gateway", applicationContext);
+    }
+
+    @Bean("contractTransactionManager")
+    R2dbcTransactionManager getContractTransactionManager(@Qualifier("contractConnectionFactory") ConnectionFactory connectionFactory) {
+        return new R2dbcTransactionManager(connectionFactory);
+    }
+
+    @Bean("gatewayTransactionManager")
+    R2dbcTransactionManager getGatewayTransactionManager(@Qualifier("gatewayConnectionFactory") ConnectionFactory connectionFactory) {
+        return new R2dbcTransactionManager(connectionFactory);
     }
 
     @Configuration

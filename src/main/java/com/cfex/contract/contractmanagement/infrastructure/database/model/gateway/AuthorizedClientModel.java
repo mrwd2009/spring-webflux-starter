@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.InsertOnlyProperty;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
@@ -39,8 +40,10 @@ public class AuthorizedClientModel {
     @Column("refresh_token_issued_at")
     private LocalDateTime refreshTokenIssuedAt;
     @Column("creation_date")
+    @InsertOnlyProperty
     private LocalDateTime creationDate;
     @Column("last_modified_date")
+    @InsertOnlyProperty
     private LocalDateTime lastModifiedDate;
 
     public AuthorizedClientValue toValue() {

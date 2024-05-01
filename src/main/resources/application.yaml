@@ -3,4 +3,4 @@ server:
 
 spring:
   profiles:
-    active: "${CONTRACT_ENVIRONMENT:development}"
+    active: "${CFEX_OC_ENVIRONMENT:development}"

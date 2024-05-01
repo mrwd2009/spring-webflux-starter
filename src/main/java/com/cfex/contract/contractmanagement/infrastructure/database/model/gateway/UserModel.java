@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.InsertOnlyProperty;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
@@ -27,8 +28,6 @@ public class UserModel {
     private String sub;
     @Column("picture")
     private String picture;
-    @Column("picture_expires_at")
-    private LocalDateTime pictureExpiresAt;
     @Column("source_picture")
     private String sourcePicture;
     @Column("session_id")
@@ -52,7 +51,9 @@ public class UserModel {
     @Column("refresh_token_issued_at")
     private LocalDateTime refreshTokenIssuedAt;
     @Column("creation_date")
+    @InsertOnlyProperty
     private LocalDateTime creationDate;
     @Column("last_modified_date")
+    @InsertOnlyProperty
     private LocalDateTime lastModifiedDate;
 }
