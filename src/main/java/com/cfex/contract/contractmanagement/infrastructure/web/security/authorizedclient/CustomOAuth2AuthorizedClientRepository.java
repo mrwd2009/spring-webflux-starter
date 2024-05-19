@@ -12,6 +12,7 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 @Component
 public class CustomOAuth2AuthorizedClientRepository implements ServerOAuth2AuthorizedClientRepository {
+    public static final String AUTHORIZED_CLIENT_ATTR_NAME = CustomOAuth2AuthorizedClientRepository.class.getName() + ".AUTHORIZED_CLIENT";
     private final ReactiveOAuth2AuthorizedClientService clientService;
 
     @Override
@@ -21,6 +22,7 @@ public class CustomOAuth2AuthorizedClientRepository implements ServerOAuth2Autho
 
     @Override
     public Mono<Void> saveAuthorizedClient(OAuth2AuthorizedClient authorizedClient, Authentication principal, ServerWebExchange exchange) {
+        exchange.getAttributes().put(AUTHORIZED_CLIENT_ATTR_NAME, authorizedClient);
         return clientService.saveAuthorizedClient(authorizedClient, principal);
     }
 

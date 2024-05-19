@@ -106,6 +106,25 @@ public class CustomOAuth2AuthorizedClientService implements ReactiveOAuth2Author
 
     @Override
     public Mono<Void> removeAuthorizedClient(String clientRegistrationId, String principalName) {
-        return authorizedClientDbRepository.deleteByClientRegistrationIdAndSub(clientRegistrationId, principalName);
+        return Mono.zip(clientRegistrationRepository.findByRegistrationId(clientRegistrationId), authorizedClientDbRepository.findFirstByClientRegistrationIdAndSub(clientRegistrationId, principalName))
+                .flatMap(tuple -> {
+                    var clientRegistration = tuple.getT1();
+                    var authorizedClientModel = tuple.getT2();
+
+                    if (authorizedClientModel == null || clientRegistration == null) {
+                        return null;
+                    }
+
+                    authorizedClientModel.setAccessTokenType("");
+                    authorizedClientModel.setAccessTokenValue("");
+                    authorizedClientModel.setAccessTokenIssuedAt(null);
+                    authorizedClientModel.setAccessTokenExpiresAt(null);
+                    authorizedClientModel.setAccessTokenScopes("");
+                    authorizedClientModel.setRefreshTokenValue("");
+                    authorizedClientModel.setRefreshTokenIssuedAt(null);
+
+                    return authorizedClientDbRepository.save(authorizedClientModel);
+                })
+                .then();
     }
 }

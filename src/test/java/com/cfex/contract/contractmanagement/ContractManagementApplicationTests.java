@@ -7,12 +7,16 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.keygen.KeyGenerators;
 
 import java.math.BigDecimal;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.util.Base64;
 import java.util.HashMap;
 
 //@SpringBootTest
@@ -66,6 +70,22 @@ class ContractManagementApplicationTests {
 
 		// Convert Instant to a specific time-zone
 		System.out.println("Instant in UTC: " + instant.atZone(ZoneId.of("America/Los_Angeles")));
+	}
+
+	@Test
+	void geneterateKeys() {
+		var a = KeyGenerators.secureRandom(64);
+		var b = KeyGenerators.secureRandom(16);
+
+		System.out.println(Base64.getEncoder().encodeToString(a.generateKey()));
+		System.out.println(Base64.getEncoder().encodeToString(b.generateKey()));
+	}
+
+	@Test
+	void testUri() throws URISyntaxException {
+		var uri = new URI("../test/right");
+		System.out.println(uri.getPath());
+		System.out.println(uri.getHost());
 	}
 
 }
