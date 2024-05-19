@@ -19,7 +19,7 @@ import java.util.Base64;
 
 @Component
 public class JwtHelper {
-    public static String AUTH0_CLAIM_ROLE = "cfex/roles";
+    public static String AUTH0_CLAIM_ROLES = "cfex/roles";
     public static String AUTH0_CLAIM_INVITATION = "cfex/invitation";
     public static String AUTH0_CLAIM_MARKETPLACE_CODE = "cfex/marketplaceCode";
     public static String AUTH0_CLAIM_SUBSCRIPTIONS = "cfex/subscriptions";

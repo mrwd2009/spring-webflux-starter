@@ -29,11 +29,6 @@ public class CustomOAuth2AuthorizedClientService implements ReactiveOAuth2Author
                 .map(tuple -> {
                     var clientRegistration = tuple.getT1();
                     var authorizedClientModel = tuple.getT2();
-
-                    if (authorizedClientModel == null || clientRegistration == null) {
-                        return null;
-                    }
-
                     var systemZoneId = ZoneId.systemDefault();
 
                     var accessToken = new OAuth2AccessToken(
@@ -106,15 +101,8 @@ public class CustomOAuth2AuthorizedClientService implements ReactiveOAuth2Author
 
     @Override
     public Mono<Void> removeAuthorizedClient(String clientRegistrationId, String principalName) {
-        return Mono.zip(clientRegistrationRepository.findByRegistrationId(clientRegistrationId), authorizedClientDbRepository.findFirstByClientRegistrationIdAndSub(clientRegistrationId, principalName))
-                .flatMap(tuple -> {
-                    var clientRegistration = tuple.getT1();
-                    var authorizedClientModel = tuple.getT2();
-
-                    if (authorizedClientModel == null || clientRegistration == null) {
-                        return null;
-                    }
-
+        return authorizedClientDbRepository.findFirstByClientRegistrationIdAndSub(clientRegistrationId, principalName)
+                .flatMap(authorizedClientModel -> {
                     authorizedClientModel.setAccessTokenType("");
                     authorizedClientModel.setAccessTokenValue("");
                     authorizedClientModel.setAccessTokenIssuedAt(null);
@@ -122,7 +110,6 @@ public class CustomOAuth2AuthorizedClientService implements ReactiveOAuth2Author
                     authorizedClientModel.setAccessTokenScopes("");
                     authorizedClientModel.setRefreshTokenValue("");
                     authorizedClientModel.setRefreshTokenIssuedAt(null);
-
                     return authorizedClientDbRepository.save(authorizedClientModel);
                 })
                 .then();

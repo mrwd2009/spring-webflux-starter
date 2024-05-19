@@ -40,7 +40,7 @@ public class CustomServerSecurityContextRepository implements ServerSecurityCont
             var nonce = user.getNonce();
             var email = user.getEmail();
             var organizationCode = user.getClaimAsString(JwtHelper.AUTH0_CLAIM_MARKETPLACE_CODE);
-            var organizationRoles = user.getClaimAsStringList(JwtHelper.AUTH0_CLAIM_ROLE);
+            var organizationRoles = user.getClaimAsStringList(JwtHelper.AUTH0_CLAIM_ROLES);
             var subscriptions = user.getClaimAsStringList(JwtHelper.AUTH0_CLAIM_SUBSCRIPTIONS);
             var issuedAt = authorizedClient.getAccessToken().getIssuedAt();
             var expiredAt = authorizedClient.getAccessToken().getExpiresAt();
