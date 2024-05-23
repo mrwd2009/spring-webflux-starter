@@ -38,6 +38,12 @@ public class ApplicationProperties {
     @Value("${cfex-oc.session.cookie-key}")
     private String sessionCookieKey;
 
-    @Value("${cfex-oc.session.effective-minutes}")
+    @Value("${cfex-oc.session.max-age-minutes:480}")
+    private Integer sessionMaxAgeMinutes;
+
+    @Value("${cfex-oc.session.effective-minutes:240}")
     private Integer sessionEffectiveMinutes;
+
+    @Value("${cfex-oc.session.extending-minutes:60}")
+    private Integer sessionExtendingMinutes;
 }

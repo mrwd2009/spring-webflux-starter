@@ -7,17 +7,22 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2Clien
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientPropertiesMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientManager;
+import org.springframework.security.oauth2.client.ReactiveOAuth2AuthorizedClientProviderBuilder;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcReactiveOAuth2UserService;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.registration.InMemoryReactiveClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.oauth2.client.userinfo.ReactiveOAuth2UserService;
+import org.springframework.security.oauth2.client.web.DefaultReactiveOAuth2AuthorizedClientManager;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestCustomizers;
 import org.springframework.security.oauth2.client.web.server.DefaultServerOAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.client.web.server.ServerAuthorizationRequestRepository;
 import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
@@ -48,6 +53,11 @@ public class WebSecurityConfiguration {
                     ;
                 })
                 .requestCache(ServerHttpSecurity.RequestCacheSpec::disable)
+                .exceptionHandling((builder) -> {
+                    builder
+                            .accessDeniedHandler(authenticationController::onAccessDenied)
+                            .authenticationEntryPoint(authenticationController::onAuthenticationEntryPoint);
+                })
                 .build();
     }
 
@@ -96,5 +106,21 @@ public class WebSecurityConfiguration {
                         var roleAuthorities = roles.stream().map((role) -> new SimpleGrantedAuthority("ROLE_" + role));
                         return new DefaultOidcUser(Stream.concat(authorities.stream(), roleAuthorities).distinct().toList(), user.getIdToken(), user.getUserInfo());
                     });
+    }
+
+    @Bean
+    @Primary
+    public ReactiveOAuth2AuthorizedClientManager authorizedClientManager(
+            ReactiveClientRegistrationRepository clientRegistrationRepository,
+            ServerOAuth2AuthorizedClientRepository clientRepository
+    ) {
+        var provider = ReactiveOAuth2AuthorizedClientProviderBuilder.builder()
+                .refreshToken()
+                .build();
+
+        var manager = new DefaultReactiveOAuth2AuthorizedClientManager(clientRegistrationRepository, clientRepository);
+        manager.setAuthorizedClientProvider(provider);
+
+        return manager;
     }
 }

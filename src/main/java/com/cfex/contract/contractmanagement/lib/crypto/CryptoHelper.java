@@ -3,6 +3,7 @@ package com.cfex.contract.contractmanagement.lib.crypto;
 import com.cfex.contract.contractmanagement.config.ApplicationProperties;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.codec.Hex;
 import org.springframework.security.crypto.encrypt.BouncyCastleAesGcmBytesEncryptor;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
@@ -18,7 +19,7 @@ public class CryptoHelper {
     private final Base64.Decoder base64Decoder = Base64.getDecoder();
     private final ObjectMapper objectMapper;
 
-    public CryptoHelper(ApplicationProperties config, ObjectMapper objectMapper) {
+    public CryptoHelper(ApplicationProperties config, @Qualifier("springSecurity") ObjectMapper objectMapper) {
         var saltBytes = base64Decoder.decode(config.getCryptoSalt());
         var saltHex = new String(Hex.encode(saltBytes));
         this.encryptor = new BouncyCastleAesGcmBytesEncryptor(config.getCryptoPassword(), saltHex);

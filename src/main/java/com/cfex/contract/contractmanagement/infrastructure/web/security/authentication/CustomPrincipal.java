@@ -15,6 +15,7 @@ public class CustomPrincipal implements Principal {
     private List<String> organizationRoles;
     private List<String> subscriptions;
     private String organizationCode;
+    private String clientRegistrationId;
 
     @Override
     public String getName() {

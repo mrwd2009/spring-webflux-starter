@@ -20,7 +20,7 @@ public class CustomAuthenticationToken extends AbstractAuthenticationToken {
     }
 
     @Override
-    public Object getPrincipal() {
+    public CustomPrincipal getPrincipal() {
         return principal;
     }
 }

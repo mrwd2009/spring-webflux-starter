@@ -29,6 +29,8 @@ public class JwtHelper {
     public static String OC_CLAIM_ROLES = "oc/roles";
     public static String OC_CLAIM_SUBSCRIPTIONS = "oc/subscriptions";
     public static String OC_CLAIM_ORG_CODE = "oc/marketplaceCode";
+    public static String OC_CLAIM_SESSION_ISSUED_AT = "oc/sessionIssuedAt";
+    public static String OC_CLAIM_CLIENT_REGISTRATION_ID = "oc/clientRegistrationId";
 
     private final Base64.Decoder base64Decoder = Base64.getDecoder();
     private final NimbusJwtEncoder jwtEncoder;
