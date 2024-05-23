@@ -34,7 +34,7 @@ spring:
             client-name: "Auth0"
         provider:
           auth0:
-            issuer-uri: https://cfex-dev.us.auth0.com/
+            issuer-uri: https://xxx.us.auth0.com/
 
 management:
   endpoints:
